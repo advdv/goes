@@ -80,7 +80,7 @@ go.run({
 });`, jsbufn)
 
 	args := []string{
-		"npx", "esbuild", "hello_go_after.js", "--minify", "--target=es5", "--outfile=hello_go_after.min.js",
+		"npx", "esbuild", "hello_go_after.js", "--target=es5", "--outfile=hello_go_after.min.js",
 	}
 
 	cmd := exec.Command(args[0], args[1:]...)
