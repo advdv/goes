@@ -13,3 +13,11 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+main.wasm
+binaryen
+hello_go.js
+hello_go_after.js
+hello_go.min.js
+node_modules
+hello_go.min.js.gz
