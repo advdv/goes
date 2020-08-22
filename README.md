@@ -5,6 +5,9 @@ Go to Javascript es(5) compiling
 - [ ] Figure out TextEncoder polyfill limitations
 
 - 'require' is not defined Wasm_exec_es5.js (880,4)
+- 'Promise' is undefined
+
+
 - 'Go' is not defined hello_go_after.min.js (1,1)
 
 
