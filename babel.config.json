@@ -1,5 +1,7 @@
 {
-    "plugins": ["@babel/plugin-transform-runtime"],
+    // "plugins": [
+    //     ["@babel/plugin-transform-runtime", {"corejs": 3}]
+    // ],
     "presets": [
         [
             "@babel/env",
@@ -10,9 +12,9 @@
                     "chrome": "67",
                     "safari": "11.1",
                     "ie": "11"
-                },
-                "useBuiltIns": "entry",
-                "corejs": "3.6.4"
+                }
+                // ,"useBuiltIns": "usage",
+                // "corejs": "3.6.4"
             }
         ]
     ]
