@@ -47,13 +47,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
   if (!global.require && typeof require !== 'undefined') {
     global.require = require;
-  } //   if (!global.fs && global.require) {
-  //     const fs = require('fs')
-  //     if (Object.keys(fs) !== 0) {
-  //       global.fs = fs
-  //     }
-  //   }
+  }
 
+  if (!global.fs && global.require) {
+    var _fs = require('fs');
+
+    if (Object.keys(_fs) !== 0) {
+      global.fs = _fs;
+    }
+  }
 
   var enosys = function enosys() {
     var err = new Error('not implemented');
@@ -401,7 +403,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
             var n = _this.mem.getInt32(sp + 24, true);
 
-            global.fs.writeSync(fd, new Uint8Array(_this._inst.exports.mem.buffer, p, n));
+            fs.writeSync(fd, new Uint8Array(_this._inst.exports.mem.buffer, p, n));
           },
           // func resetMemoryDataView()
           'runtime.resetMemoryDataView': function runtimeResetMemoryDataView(sp) {

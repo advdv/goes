@@ -1,11 +1,10 @@
 # goes
 Go to Javascript es(5) compiling
 
-- [ ] Enable minification again after ie tests
+- [ ] Enable minification on program js, esbuild will cause stack error on ie11
+- [ ] Enable minification wasm_exec
 - [ ] Figure out TextEncoder polyfill limitations
-
-- 'require' is not defined Wasm_exec_es5.js (880,4)
-- 'Promise' is undefined
+- [ ] Run an extra large program: maybe compile the whole stdlib tests
 
 # ie11 supports
 - Require is not defined: probably the global.TextEncoder
@@ -28,6 +27,11 @@ npx babel wasm_exec.js --out-file wasm_exec_es5.js && npx browserify wasm_exec_e
 npx babel wasm_exec.js --out-file wasm_exec_es5.js
 
 ## Changes to wasm_exec.js
-- js.writeSync => global.js.writeSync
+<!-- - js.writeSync => global.js.writeSync maybe a bug-->
 - remove check for fs, always emulate
 
+## Minification using google closur compiler
+npx google-closure-compiler --js=hello_go_after.js --js_output_file=hello_go_after.min.js
+
+minify the wasm_exec_es5: 
+npx google-closure-compiler --js=wasm_exec_es5.js --js_output_file=wasm_exec_es5.min.js

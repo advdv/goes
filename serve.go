@@ -14,7 +14,7 @@ import (
 var bufn = 1024 * 1024
 var jsbufn = 18022400 // @TODO how to determine this from the wasm2js output
 
-func prep() {
+func prepEmscripten() {
 	log.Println("modifying js file")
 
 	out, err := os.Create("hello_go_after.js")
@@ -79,6 +79,8 @@ go.run({
 	}
 });`, jsbufn)
 
+	// @TODO minification causes out-of-stack on ie11
+
 	args := []string{
 		"npx", "esbuild", "hello_go_after.js", "--target=es5", "--outfile=hello_go_after.min.js",
 	}
@@ -86,7 +88,7 @@ go.run({
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stderr = os.Stderr
 
-	log.Println("minify js")
+	log.Println("minify main program js")
 	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
@@ -95,8 +97,41 @@ go.run({
 	return
 }
 
+func prepWasmExec() {
+
+	args := []string{
+		"npx", "babel", "wasm_exec.js", "--out-file", "wasm_exec_es5.js",
+	}
+
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Stderr = os.Stderr
+
+	log.Println("transpile to ie11 suported js")
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	args = []string{
+		"npx", "google-closure-compiler", "--js=wasm_exec_es5.js", "--js_output_file=wasm_exec_es5.min.js",
+	}
+
+	cmd = exec.Command(args[0], args[1:]...)
+	cmd.Stderr = os.Stderr
+
+	log.Println("minify wasm_exec.js")
+	err = cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// @TODO minify es5 build npx google-closure-compiler --js=wasm_exec_es5.js --js_output_file=wasm_exec_es5.min.js
+
+}
+
 func main() {
-	prep()
+	prepEmscripten()
+	prepWasmExec()
 
 	log.Println("ready")
 	http.ListenAndServe(":9090", http.FileServer(http.Dir(".")))
