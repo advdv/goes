@@ -3,18 +3,46 @@
   <head>
     <meta charset="utf-8">
 
-    <script>(function(){if(window.msCrypto) {window.crypto = window.msCrypto;}})()</script>
-    <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding-indexes.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script>    
-    <script src="https://unpkg.com/core-js-bundle@3.6.5/minified.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.7/runtime.min.js"></script>
-    <script src="wasm_exec_es5.min.js"></script>
-
-    <script src="hello_go_after.min.js" defer></script>
+    <script type="text/javascript">
+      
+      // should target ie11 or below: https://stackoverflow.com/questions/29987969/how-to-load-a-script-only-in-ie
+      if(/MSIE \d|Trident.*rv:/.test(navigator.userAgent) || window.location.hash === "#emscripten") {
+        if(window.msCrypto) {window.crypto = window.msCrypto;}
+        document.write('<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding-indexes.js"><\/script>');
+        document.write('<script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"><\/script>');
+        document.write('<script src="https://unpkg.com/core-js-bundle@3.6.5/minified.js"><\/script>');
+        document.write('<script src="https://cdn.jsdelivr.net/npm/regenerator-runtime@0.13.7/runtime.min.js"><\/script>');
+        document.write('<script src="wasm_exec_es5.min.js"><\/script>');
+        document.write('<script src="hello_go_after.min.js"><\/script>');
+      } else {
+        window.wasmExecLoaded = function() {
+          const go = new Go();          
+          if (WebAssembly.instantiateStreaming) {
+            
+            // chrome 
+            WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then(function(result) {
+              go.run(result.instance);
+            });          
+          
+          } else {
+            
+            // safari
+            fetch('main.wasm').then(function(response) {
+              return response.arrayBuffer()
+            }).then(function(bytes) {
+              return WebAssembly.instantiate(bytes, go.importObject)
+            }).then(function(result) {
+              return go.run(result.instance)
+            });
+          }
+        }
+        
+        document.write('<script onload="window.wasmExecLoaded()" src="wasm_exec.js" defer><\/script>');
+      }
+    </script>
 
     <title>Goes Demo</title>
   </head>
   <body>
-
   </body>
 </html>

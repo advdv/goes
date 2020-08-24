@@ -12,10 +12,10 @@ function print_help {
 }
 
 function run_build { # build the Javascript
-    # GOOS=js GOARCH=wasm go build -o main.wasm
-    
+	echo "--> building wasm"
+    GOOS=js GOARCH=wasm go build -o main.wasm
+	echo "--> converting wasm into js"
 	/Users/adam/Projects/go/src/github.com/WebAssembly/binaryen/bin/wasm2js --emscripten -O main.wasm -o hello_go.js
-
 }
 
 case $1 in
