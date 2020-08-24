@@ -12,7 +12,7 @@ function print_help {
 }
 
 function run_build { # build the Javascript
-    GOOS=js GOARCH=wasm go build -o main.wasm
+    # GOOS=js GOARCH=wasm go build -o main.wasm
     
 	/Users/adam/Projects/go/src/github.com/WebAssembly/binaryen/bin/wasm2js --emscripten -O main.wasm -o hello_go.js
 

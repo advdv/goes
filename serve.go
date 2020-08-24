@@ -11,8 +11,10 @@ import (
 	"os/exec"
 )
 
-var bufn = 1024 * 1024
-var jsbufn = 18022400 // @TODO how to determine this from the wasm2js output
+var bufn = 1024 * 1024 * 30
+
+// var jsbufn = 18022400 // @TODO how to determine this from the wasm2js output
+var jsbufn = 1024 * 1024 * 200
 
 func prepEmscripten() {
 	log.Println("modifying js file")

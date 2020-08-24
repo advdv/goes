@@ -22,6 +22,6 @@ func main() {
 	}()
 
 	for range time.Tick(time.Second * 3) {
-		fmt.Println("hello, world", js.Global().Get("foo"))
+		fmt.Println("hello, 日本語:", js.Global().Get("foo"))
 	}
 }
